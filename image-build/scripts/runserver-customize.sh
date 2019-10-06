@@ -54,8 +54,11 @@ calculate_heap_sizes()
 {
     case "`uname`" in
         Linux)
-            system_memory_in_mb=`free -m| sed -n '2p' | awk '{print $2}'`
-            system_cpu_cores=`egrep -c 'processor([[:space:]]+):.*' /proc/cpuinfo`
+            system_memory_in_bytes=`cat /sys/fs/cgroup/memory/memory.limit_in_bytes`
+      	    system_memory_in_mb=`expr ${system_memory_in_bytes} / 1024 / 1024`
+      	    system_cpuset_cpus=`cat /sys/fs/cgroup/cpuset/cpuset.cpus`
+      	    system_cpu_core_ids=`echo ${system_cpuset_cpus} | awk '/-/{for (i=$1; i<=$2; i++)printf "%s%s",i,ORS;next} 1' ORS=' ' RS=, FS=-`
+      	    system_cpu_cores=`echo ${system_cpu_core_ids}|awk -F ' ' '{print NF}'`
         ;;
         FreeBSD)
             system_memory_in_bytes=`sysctl hw.physmem | awk '{print $2}'`
