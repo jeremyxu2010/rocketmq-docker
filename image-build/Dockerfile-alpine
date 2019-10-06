@@ -80,7 +80,7 @@ RUN mv ${ROCKETMQ_HOME}/bin/runbroker-customize.sh ${ROCKETMQ_HOME}/bin/runbroke
  && chmod a+x ${ROCKETMQ_HOME}/bin/mqbroker
 
 # Export Java options
-RUN export JAVA_OPT=" -Duser.home=/opt"
+ENV JAVA_OPT " -Duser.home=/opt"
 
 # Add ${JAVA_HOME}/lib/ext as java.ext.dirs
 RUN sed -i 's/${JAVA_HOME}\/jre\/lib\/ext/${JAVA_HOME}\/jre\/lib\/ext:${JAVA_HOME}\/lib\/ext/' ${ROCKETMQ_HOME}/bin/tools.sh
